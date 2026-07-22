@@ -1,0 +1,191 @@
+<!-- Gian Aceves, CSC102_JulyHybrid2026, 7/22/2026-->
+<!-- This browser will render the HTML page -->
+<!-- Assignment: User input validation -->
+<!-- This page validates a user's first name, last name, and zip code-->
+<!-- submit button, no addEventListeners, and no alerts (innerHTML only)-->
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <!-- set character encoding for the page-->
+    <meta charset="utf-8">
+    <!-- set the viewport for responsive design -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Title shown on the browser tab-->
+    <title>Strings</title>
+    <!-- Importing a creative Google font for a fun user spy-themed experience-->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Rajdhani:wght@400;600&display=swap"
+        rel="stylesheet">
+    <style>
+        /* gradiant background for the page to give a mystery vibe, kept inside style tag (not JS) */
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Orbitron', 'Rajdhani', sans-serif;
+            background: linear-gradient(135deg, #1f1c2c, #928dab);
+            color: #868585;
+        }
+
+        /* Styling a main card that holds the form*/
+        .card {
+            background: rgba(0, 0, 0, 0.5);
+            border: 2px solid #f88205;
+            border-radius: 16px;
+            box-shadow: 0 0px 25px rgba(255, 196, 0, 0.5);
+            padding: 40px;
+            width: 400px;
+            text-align: center;
+        }
+
+        /* Heading with the creative 'Orbitron' font */
+        h1 {
+            font-family: 'Orbitron', 'Rajdhani', sans-serif;
+            font-size: 22px;
+            color: #f88205;
+            letter-spacing: 1px;
+        }
+
+        /* Styling each label aboce the inputs */
+        label {
+            display: block;
+            text-align: left;
+            margin-top: 14px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        /* Styling the text input boxes*/
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-top: 8px;
+            border-radius: 8px;
+            border: 1px solid #f88205;
+            background: #0d1b2a;
+            color: #e6f7ff;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+
+        /* Styling the submit button */
+        button {
+            margin-top: 22px;
+            padding: 12px 20px;
+            width: 100%;
+            border: none;
+            border-radius: 8px;
+            background: #f88205;
+            color: #0d1b2a;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.2s ease;
+        }
+
+        /* Hover effect for the submit button */
+        button:hover {
+            background: #e5ac00;
+        }
+
+        /* Styling the area where the validation warings appear*/
+        #messageArea {
+            margin-top: 15px;
+            font-size: 14px;
+            min-height: 20px;
+        }
+
+        /* Styling for error text*/
+        .error-text {
+            color: #ff4d4d;
+            font-weight: 600;
+        }
+
+        /* Styling for revealed secret text*/
+        .success-text {
+            color: #7CFC00;
+            font-weight: 600;
+            font-size: 20px;
+        }
+    </style>
+</head>
+<!-- The card that visually contains the whole form -->
+<div class="card">
+    <!-- page heading -->
+    <h1>A SECRET PAGE</h1>
+
+    <!-- Single form holding all inputs and the one submit button   -->
+    <!-- onsubmit calls validateForm() and returns false to stop page reload-->
+    <form onsubmit="return validateForm()">
+        <!-- label for the frist name input-->
+        <label for="firstName">First Name:</label>
+        <!--text box for the first name input-->
+        <input type="text" id="firstName" placeholder="Enter first name">
+
+        <!-- label for the last name input-->
+        <label for="lastName">Last Name:</label>
+        <!--text box for the last name input-->
+        <input type="text" id="lastName" placeholder="Enter last name">
+
+        <!-- label for the zip code input-->
+        <label for="zipCode">Zip Code:</label>
+        <!--text box for the zip code input-->
+        <input type="text" id="zipCode" placeholder="Enter 5-digit zip code">
+
+        <!-- submit button for the form -->
+        <button type="submit">Unlock Page</button>
+    </form>
+    <!-- This div displays all validation warnings and the secret message -->
+    <div id="messageArea"></div>
+    <script>
+        // Function that runs when the form is submitted
+        function validateForm() {
+            // Grabbing the first name value and trimming extra spaces
+            var firstName = document.getElementById("firstName").value.trim();
+            // Grabbing the last name value and trimming extra spaces
+            var lastName = document.getElementById("lastName").value.trim();
+            // Grabbing the zip code value and trimming extra spaces
+            var zipCode = document.getElementById("zipCode").value.trim();
+            // Grabbing the message area where feedback will be shown
+            var messageArea = document.getElementById("messageArea");
+
+            // Combining first name + space + last name into one variable
+            var fullname = firstName + " " + lastName;
+
+            // Checking if both name fields were actually filled in
+            if (firstName === "" || lastName === "") {
+                //Display an error using innerHTML, no alert used
+                messageArea.innerHTML = "<span class='error-text'>Please enter both first and last names.</span>";
+                //Stopping the form from submitting/reloading the page
+                return false;
+            }
+
+            // Checking if the combined full name is longer than 20 characters
+            if (fullname.length > 20) {
+                //Display an error using innerHTML, no alert used
+                messageArea.innerHTML = "<span class='error-text'>Full name cannot exceed 20 characters.</span>";
+                return false;
+            }
+            // Checking if the zip code is exactly 5 digits
+            var zipCodePattern = /^\d{5}$/;
+            if (!zipCodePattern.test(zipCode)) {
+                //Display an error using innerHTML, no alert used
+                messageArea.innerHTML = "<span class='error-text'>Zip code must be exactly 5 digits.</span>";
+                return false;
+            }
+            // If all validations pass, display the secert message using the user's name 
+            var secretMessage = "Welcome, " + fullname + "! You have unlocked the secret page.";
+            //displaying the secret message in the message using innerHTML, no alert used
+            messageArea.innerHTML = "<span class='success-text'>" + secretMessage + "</span>";
+            return false;
+
+        } 
+    </script>
+
+
+
+</html>
